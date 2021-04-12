@@ -2,6 +2,8 @@ package com.atguigu.guli.service.edu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -63,7 +65,8 @@ public class Teacher implements Serializable {
     @TableLogic
     private Integer isDeleted;
 
-    @ApiModelProperty(value = "创建时间")
+
+    @ApiModelProperty(value = "2021/12/5")
       @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 

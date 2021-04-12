@@ -3,6 +3,7 @@ package com.atguigu.guli.service.edu.controller.admin;
 
 import com.atguigu.guli.common.base.result.R;
 import com.atguigu.guli.service.edu.entity.Teacher;
+import com.atguigu.guli.service.edu.feign.OssFileService;
 import com.atguigu.guli.service.edu.service.TeacherService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,11 +22,15 @@ import java.util.*;
  * @author centao
  * @since 2021-03-16
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/admin/edu/teacher")
 public class TeacherController {
     @Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private OssFileService ossFileService;
 
     @GetMapping("list")
     public R listAll(){
@@ -69,6 +74,8 @@ public class TeacherController {
     @ApiOperation("更新讲师")
     @PutMapping("update")
     public R updateById(@ApiParam(value = "讲师对象", required = true) @RequestBody Teacher teacher){
+        System.out.println("teacher");
+        System.out.println(teacher);
         boolean result = teacherService.updateById(teacher);
         if(result){
             return R.ok().message("修改成功");
@@ -86,6 +93,35 @@ public class TeacherController {
         }else{
             return R.error().message("数据不存在");
         }
+    }
+
+    @ApiOperation(value = "批量删除数据")
+    @DeleteMapping("batch-remove")
+    public R removeRows(
+            @ApiParam(value = "教师列表", required = true)
+            @RequestBody List<String> idList){
+        boolean result = teacherService.removeByIds(idList);
+        if(result){
+            return R.ok().message("删除成功");
+        }else{
+            return R.error().message("数据不存在");
+        }
+    }
+
+    @ApiOperation(value = "根据关键字查询教师")
+    @GetMapping("list/name/{key}")
+    public R selectNameListByKey(
+            @ApiParam(value = "关键字",required = true)
+            @PathVariable String key
+    ){
+        List<Map<String,Object>> nameList = teacherService.selectNameList(key);
+        return R.ok().data("nameList",nameList);
+    }
+
+    @GetMapping("test")
+    public R test(){
+        ossFileService.test();
+        return  R.ok();
     }
 }
 
